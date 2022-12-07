@@ -1,17 +1,72 @@
-let carrinho = [];
-
+let cartList = [];
+let productsList = [];
 function attcarrinho() {
   let divcarrinho = document.getElementById("carrinho");
+  divcarrinho.innerHTML = window.onload = () => {
+    createHome();
+  };
 }
 
-async function shoplucao() {
-  let resultado = await fetch(
-    "https://api.mercadolibre.com/sites/MLB/search?q=Iphone14"
+async function fetchByQuery(query = "Iphone14") {
+  let result = await fetch(
+    `https://api.mercadolibre.com/sites/MLB/search?q=${query}`
   );
-  let boalucao = await resultado.json();
+  return (await result.json()).results;
 
-  let resul = boalucao.results;
-  let res = resul;
+  function createProductElement(className) {
+    const ProductElement = document.createElement("div");
+    ProductElement.className = `${className}product `;
+    return ProductElement;
+  }
+
+  function createTitle(text, className) {
+    const titleElement = document.createElement("div");
+    titleElement.className = `${className}title`;
+    titleElement.innerText = text;
+    return titleElement;
+  }
+
+  function createValue(value, className) {
+    const valueElement = document.createElement("div");
+    valueElement.className = `${className} valor`;
+    valueElement.innerText = value;
+    return valueElement;
+  }
+
+  function createImage(thumbnail, className) {
+    const imageElemente = document.createElement("img");
+    imageElemente.src = thumbnail;
+    imageElemente.className = `${className}Imgphone`;
+
+    const imageDiv = document.createElement("div");
+    imageDiv.appendChild(imageElemente);
+    return imageDiv;
+  }
+
+  function createButton(id, className) {
+    const button = document.createElement("input");
+    button.type = "button";
+    button.value = "Enviar ao carrinho";
+    button.id = id;
+    button.className = `${className}btc`;
+    button.addEventListener("click", buttonCartClickHandler);
+    return button;
+  }
+
+  function buttonCartClickHandler(event) {
+    event.preventDefault()
+    for ( c = 0;  c < productsList.length; c++) {
+
+      if( productsList[c].id === event.target.id){
+        cartList.push(productsList[c])
+        break
+      }
+    }
+
+
+
+
+  }
 
   for (i = 0; i < res.length; i++) {
     // Titulo Produtos
