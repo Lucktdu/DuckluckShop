@@ -1,11 +1,9 @@
 let cartList = [];
 let productsList = [];
-function attcarrinho() {
-  let divcarrinho = document.getElementById("carrinho");
-  divcarrinho.innerHTML = window.onload = () => {
-    createHome();
-  };
-}
+
+window.onload = () => {
+  createHome();
+};
 
 async function fetchByQuery(query = "Iphone14") {
   let result = await fetch(
@@ -34,12 +32,12 @@ async function fetchByQuery(query = "Iphone14") {
   }
 
   function createImage(thumbnail, className) {
-    const imageElemente = document.createElement("img");
-    imageElemente.src = thumbnail;
-    imageElemente.className = `${className}Imgphone`;
+    const imageElement = document.createElement("img");
+    imageElement.src = thumbnail;
+    imageElement.className = `${className}Imgphone`;
 
     const imageDiv = document.createElement("div");
-    imageDiv.appendChild(imageElemente);
+    imageDiv.appendChild(imageElement);
     return imageDiv;
   }
 
@@ -54,70 +52,46 @@ async function fetchByQuery(query = "Iphone14") {
   }
 
   function buttonCartClickHandler(event) {
-    event.preventDefault()
-    for ( c = 0;  c < productsList.length; c++) {
-
-      if( productsList[c].id === event.target.id){
-        cartList.push(productsList[c])
-        break
+    event.preventDefault();
+    for (c = 0; c < productsList.length; c++) {
+      if (productsList[c].id === event.target.id) {
+        cartList.push(productsList[c]);
+        break;
       }
     }
 
-
-
-
-  }
-
-  for (i = 0; i < res.length; i++) {
-    // Titulo Produtos
-    let divprodutos = document.getElementById("produtos");
-    let titulo = document.createElement("div");
-    titulo.className = "produto";
-    titulo.innerHTML = res[i].title;
-
-    // Valor dos produtos
-    let valor = document.createElement("div");
-    valor.className = "valor";
-    valor.innerHTML = res[i].price;
-
-    // imagem produtos
-    let imagem = document.createElement("img");
-    imagem.src = res[i].thumbnail;
-    imagem.className = "Imgphone";
-    let divimagem = document.createElement("div");
-    divimagem.append(imagem);
-    document.getElementsByClassName("produto").innerHTML = imagem[i];
-
-    // Botão Carrinho ---------
-    let botao = document.createElement("input");
-    botao.type = "button";
-    botao.value = "Envia ao carrinho";
-    botao.className = "btc";
-    botao.id = res[i].id;
-
-    // console.log('produtos');
-    divprodutos.appendChild(titulo);
-    divprodutos.appendChild(valor);
-    divprodutos.appendChild(imagem);
-    divprodutos.appendChild(botao);
-
-    let divbtc = document.getElementsByClassName("btc");
-    divbtc[i].addEventListener("click", function () {
-      var btcid = botao.getAttribute("id");
-      for (c = 0; c < res.length; c++) {
-        if (res[c].id === btcid) {
-          // console.log(res[c])
-          //Adicionar o produto a um array.
-          carrinho.push(res[c]);
-          console.log(carrinho);
-          // Chamar uma função que adiciona ao carrinho.
-        }
-      }
-
-      //  res[btcid].filter(res.title)
-      //  document.getElementsByClassName('carrinho').innerHTML =
-    });
+    addItemToCar();
   }
 }
+function createProductElement(
+  productsList,
+  fatherElement,
+  classinitial = "home"
+) {
+  for (i = 0; i < productsList.length; i++) {
+    const productElement = createProductElement(classinitial);
+    const titleElement = createTitle(productsList[i].title, classinitial);
+    const valueElement = createVKalue(productsList[i].price, classinitial);
+    const imageDiv = createImage(productsList[i].thumbnail, classinitial);
+    const cartButton = createCartButton(productsList[i].id, classinitial);
 
-shoplucao();
+    productElement.appendChild(titleElement);
+    productElement.appendChild(valueElement);
+    productElement.appendChild(imageDiv);
+    productElement.appendChild(cartButton);
+    fatherElement.appendChild(productElement);
+  }
+}
+async function createHome() {
+  const productElement = document.getElementById("produtos");
+  const products = await fetchByQuery();
+  productsList = products;
+  createProductElement(products, productElement);
+}
+
+function addItemToCar() {
+  const cartElement = document.getElementById("carrinho");
+  cartElement.innerText = "";
+
+  createProductElement(cartList, cartElement, "cart");
+}
