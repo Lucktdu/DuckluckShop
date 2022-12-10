@@ -41,7 +41,7 @@ function createImage(thumbnail, className) {
   return imageDiv;
 }
 
-function createButton(id, className) {
+function createCartButton(id, className) {
   const button = document.createElement("input");
   button.type = "button";
   button.value = "Enviar ao carrinho";
@@ -67,8 +67,10 @@ function createProductElements(
   fatherElement,
   classInitial = "home"
 ) {
-  for (i = 0; i < productList.length; i++) {
-    const productElement = createProductElements(classInitial);
+  for (i = 0; i < productList.length; i++) 
+  
+  {
+    const productElement = createProductElement(classInitial);
     const titleElement = createTitle(productList[i].title, classInitial);
     const valueElement = createValue(productList[i].price, classInitial);
     const imageDiv = createImage(productList[i].thumbnail, classInitial);
@@ -79,13 +81,14 @@ function createProductElements(
     productElement.appendChild(imageDiv);
     productElement.appendChild(cartButton);
     fatherElement.appendChild(productElement);
+    
   }
 }
 async function createHome() {
-  const productElement = document.getElementById("produtos");
+  const productsElement = document.getElementById("produtos");
   const products = await fetchByQuery();
   productsList = products;
-  createProductElements(products, productElement);
+  createProductElements(products, productsElement);
 }
 
 function addItemToCar() {
